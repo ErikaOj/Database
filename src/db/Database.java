@@ -23,7 +23,16 @@ public class Database {
         if (validator != null) {
             validator.validate(e);
         }
+
         e.id = idCounter++;
+
+        if (e instanceof Trackable) {
+            Date now = new Date();
+            Trackable trackable = (Trackable) e;
+            trackable.setCreationDate(now);
+            trackable.setLastModificationDate(now);
+        }
+
         entities.add(e.copy());
     }
 
@@ -46,6 +55,12 @@ public class Database {
         if (validator != null) {
             validator.validate(e);
         }
+
+        if (e instanceof Trackable) {
+            Trackable trackable = (Trackable) e;
+            trackable.setLastModificationDate(new Date());
+        }
+
         for (int i = 0; i < entities.size(); i++) {
             if (entities.get(i).id == e.id) {
                 entities.set(i, e.copy());
